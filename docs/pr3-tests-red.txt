@@ -1,0 +1,116 @@
+
+> aidevcourse@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /workspaces/Ai-Project
+
+ ❯ tests/guild.test.ts (5 tests | 5 failed) 16ms
+   × Критерії приймання MVP гільдії Shadow Vanguard > фільтр за роллю Танк повертає лише учасників із роллю Танк 5ms
+     → expected 0 to be greater than 0
+   × Критерії приймання MVP гільдії Shadow Vanguard > після створення нова подія з'являється у розкладі зі статусом Набір відкрито 1ms
+     → expected undefined to be defined
+   × Критерії приймання MVP гільдії Shadow Vanguard > порожня назва або ліміт місць менше 1 не створює подію 6ms
+     → promise resolved "{ id: '', title: '   ', …(6) }" instead of rejecting
+   × Критерії приймання MVP гільдії Shadow Vanguard > запис понад ліміт місць основного складу додає гравця у Резерв 2ms
+     → expected 'Основний склад' to be 'Резерв' // Object.is equality
+   × Критерії приймання MVP гільдії Shadow Vanguard > приховування коментаря офіцером змінює його текст на повідомлення модератора 1ms
+     → expected undefined to be true // Object.is equality
+ ✓ tests/smoke.test.ts (1 test) 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/guild.test.ts > Критерії приймання MVP гільдії Shadow Vanguard > фільтр за роллю Танк повертає лише учасників із роллю Танк
+AssertionError: expected 0 to be greater than 0
+ ❯ tests/guild.test.ts:18:26
+     16|   it("фільтр за роллю Танк повертає лише учасників із роллю Танк", asy…
+     17|     const tanks = await listMembers("Танк");
+     18|     expect(tanks.length).toBeGreaterThan(0);
+       |                          ^
+     19|     expect(tanks.every((m) => m.role === "Танк")).toBe(true);
+     20|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/guild.test.ts > Критерії приймання MVP гільдії Shadow Vanguard > після створення нова подія з'являється у розкладі зі статусом Набір відкрито
+AssertionError: expected undefined to be defined
+ ❯ tests/guild.test.ts:32:21
+     30|     const events = await listEvents();
+     31|     const created = events.find((e) => e.title === uniqueTitle);
+     32|     expect(created).toBeDefined();
+       |                     ^
+     33|     expect(created?.status).toBe("Набір відкрито");
+     34|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/guild.test.ts > Критерії приймання MVP гільдії Shadow Vanguard > порожня назва або ліміт місць менше 1 не створює подію
+AssertionError: promise resolved "{ id: '', title: '   ', …(6) }" instead of rejecting
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Error {[39m
+[32m-   "message": "rejected promise",[39m
+[31m+ {[39m
+[31m+   "dateTime": "Сб, 25 травня · 19:00",[39m
+[31m+   "description": "Тестовий опис",[39m
+[31m+   "id": "",[39m
+[31m+   "maxSlots": 0,[39m
+[31m+   "registrations": [],[39m
+[31m+   "status": "Набір відкрито",[39m
+[31m+   "tier": "Рейд · Міфічний",[39m
+[31m+   "title": "   ",[39m
+[2m  }[22m
+
+ ❯ tests/guild.test.ts:44:5
+     42|         maxSlots: 0,
+     43|       })
+     44|     ).rejects.toThrow();
+       |     ^
+     45|   });
+     46| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/guild.test.ts > Критерії приймання MVP гільдії Shadow Vanguard > запис понад ліміт місць основного складу додає гравця у Резерв
+AssertionError: expected 'Основний склад' to be 'Резерв' // Object.is equality
+
+Expected: [32m"Резерв"[39m
+Received: [31m"Основний склад"[39m
+
+ ❯ tests/guild.test.ts:59:27
+     57| 
+     58|     expect(first.status).toBe("Основний склад");
+     59|     expect(second.status).toBe("Резерв");
+       |                           ^
+     60|     expect(updated?.registrations.length).toBe(2);
+     61|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/guild.test.ts > Критерії приймання MVP гільдії Shadow Vanguard > приховування коментаря офіцером змінює його текст на повідомлення модератора
+AssertionError: expected undefined to be true // Object.is equality
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+ ❯ tests/guild.test.ts:69:30
+     67|     const hidden = comments.find((c) => c.id === comment.id);
+     68| 
+     69|     expect(hidden?.isHidden).toBe(true);
+       |                              ^
+     70|     expect(hidden?.text).toBe("Повідомлення приховано модератором");
+     71|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  5 failed | 1 passed (6)
+   Start at  18:59:09
+   Duration  548ms (transform 69ms, setup 0ms, collect 76ms, tests 19ms, environment 0ms, prepare 140ms)
+
